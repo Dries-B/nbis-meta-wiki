@@ -13,4 +13,4 @@ or pull the latest Docker image:
 docker pull nbisweden/nbis-meta
 ```
 
-You are now ready to start using the workflow with some example data. Head over to the [Examples](https://github.com/NBISweden/nbis-meta/wiki/Examples) page to see some common ways of using the workflow. To start using your own data, see [how to create a sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-your-samples-in-the-sample-list).
+You are now ready to start using the workflow with some example data. Check out some common [examples](https://github.com/NBISweden/nbis-meta/wiki/Examples) and see [how to create a sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-your-samples-in-the-sample-list) to start working with your own data.
