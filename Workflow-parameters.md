@@ -175,4 +175,49 @@ Runs the MarkDuplicates tool from the [picard](https://broadinstitute.github.io/
 
 ## Assembly
 
+- `assembly_threads: 20`
+
+Threads to use for assembler.
+
+***
+
+- `megahit: True`
+
+Assemble reads using [Megahit](https://github.com/voutcn/megahit)?
+
+***
+
+- `megahit_keep_intermediate: False`
+
+Should intermediate contigs (*i.e.* contigs from running on intermediate kmer lengths) from Megahit be stored? If True, the contigs will be placed under a folder `assembly/` in the path specified with `intermediate_path` (see above).
+
+***
+
+- `megahit_additional_settings: '--min-contig-len 300 --prune-level 3'`
+
+Additional settings for Megahit. Use this to control behaviour of the assembler outside of the parameters specified above.
+
+***
+
+- `metaspades: False`
+
+Should the [Metaspades](https://github.com/ablab/spades) assembler be used? **Note**: if True this runs Metaspades instead of Megahit.
+
+***
+
+- `metaspades_keep_intermediate: False`
+
+Should intermediate contigs from Metaspades be stored? If True, the contigs will be placed under a folder `assembly/` in the path specified with `intermediate_path` (see above).
+
+***
+
+- `metaspades_keep_corrected: True`
+
+Should corrected reads produced during Metaspades assembly be stored?
+
+***
+
+- `metaspades_additional_settings: '-k 21,31,41,51,61,71,81,91,101,111,121'`
+
+Additional settings for Metaspades.
 
