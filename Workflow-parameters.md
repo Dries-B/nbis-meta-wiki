@@ -2,6 +2,7 @@ The workflow can be configured using a configuration file in `yaml` format. Thes
 
 - [Paths](#paths)
 - [Preprocessing](#preprocessing)
+- [Post-processing](#post-processing)
 - [Assembly](#assembly)
 
 ## Paths
@@ -164,3 +165,14 @@ How should SortMeRNA handle paired-end reads where only one read gets assigned t
 - `sortmerna_params: "--num_alignments 1"`
 
 Additional parameters for SortMeRNA. Here you can pass other settings not covered by the parameters above.
+
+## Post-processing
+Post-processing is done at the bam-file level after reads have been mapped to assembled contigs.
+
+- `markduplicates: True`
+
+Runs the MarkDuplicates tool from the [picard](https://broadinstitute.github.io/picard/) suite to remove duplicates from bam-files.
+
+## Assembly
+
+
