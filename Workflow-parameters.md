@@ -1,21 +1,114 @@
 The workflow can be configured using a configuration file in `yaml` format. These are the configuration parameters and their default values
 
+- [Paths](#paths)
+- [Preprocessing)(#preprocessing)
+
 ## Paths
-```yaml
-# Sample information file (required)
-sample_list: "samples/example_sample_list.tsv"
-# Work directory for workflow
-workdir: .
-# Main results directory
-results_path: results
-# Path to store report files
-report_path: results/report
-# Intermediate results path
-intermediate_path: results/intermediate
-# Temporary path
-temp_path: temp
-# Local storage path
-scratch_path: temp
-# Path to store resource files (databases etc)
-resource_path: resources
-```
+- `sample_list: samples/example_sample_list.tsv` 
+
+Path to the sample list (**required**). See [Defining your samples in the sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-your-samples-in-the-sample-list) for instructions on how to format it for your data. By default this points to an example sample list for which the sequence data is generated as part of the workflow. Feel free to use it to get acquainted with the workflow.
+
+***
+
+- `workdir: .`
+
+Main working directory for the workflow. Set to the current directory (`.`) by default.
+
+***
+
+- `results_path: results`
+
+Path for main results. Output from preprocessing, assembly etc goes here.
+
+***
+
+- `report_path: results/report`
+
+Path for report files. Output from *e.g.* MultiQC, assembly statistics and collated kraken results goes here.
+
+***
+
+- `intermediate_path: results/intermediate`
+
+Path to store intermediate files, *e.g.* intermediate fastq files created as part of preprocessing.
+
+***
+
+- `temp_path: temp`
+- `scratch_path: temp`
+
+Paths for temporary output. On compute clusters this can be set to `$TMPDIR`.
+
+***
+
+- `resource_path: resources`
+
+Path to store resource files, *e.g.* databases for tools such as `eggnog-mapper` and `pfam_scan`.
+
+## Preprocessing
+By default, the workflow runs `trimmomatic` for adapter and quality trimming, followed by `fastqc` for read statistics and `multiqc` to aggregate and visualize logfiles. Depending on your needs you may however add, modify or remove preprocessing steps.
+
+- `fastqc: True`
+
+Run Fastqc on preprocessed reads? If you do not wish to produce a sample report summary (*e.g.* if you have data that has already been preprocessed or that you know is of sufficient quality), set this to False.
+
+***
+
+- `trimmomatic: True`
+
+Run [Trimmomatic](http://www.usadellab.org/cms/index.php?page=trimmomatic) to perform adapter/quality trimming of reads.
+
+***
+
+- `trim_adapters: True`
+
+Also trim adapters from reads (in addition to quality trimming)?
+
+***
+# Adapter type to trim from paired end libraries with trimmomatic
+# ["NexteraPE-PE", "TruSeq2-PE", "TruSeq3-PE", "TruSeq3-PE-2"]
+trimmomatic_pe_adapter: "TruSeq3-PE-2"
+# Adapter type to trim from single end libraries with trimmomatic
+# ["TruSeq2-SE", "TruSeq3-SE"]
+trimmomatic_se_adapter: "TruSeq3-SE"
+# Trimmomatic parameters for trimming adapters on paired-end samples
+pe_adapter_params: "2:30:15"
+# Trimmomatic parameters for trimming adapters on single-end samples
+se_adapter_params: "2:30:15"
+# Trimmomatic parameters for trimming prior to adapter removal on paired-end samples
+pe_pre_adapter_params: ""
+# Trimmomatic parameters for trimming after adapter removal on paired-end samples
+pe_post_adapter_params: "LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:31"
+# Trimmomatic parameters for trimming prior to adapter removal on single-end samples
+se_pre_adapter_params: ""
+# Trimmomatic parameters for trimming after adapter removal on single-end samples
+se_post_adapter_params: "LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:31"
+
+# Run cutadapt? (runs instead of Trimmomatic if True)
+cutadapt: False
+# Adapter sequence to trim with cutadapt
+# Shown here is for Illumina TruSeq Universal Adapter.
+adapter_sequence: AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC
+# Reverse adapter sequence to trim with cutadapt
+rev_adapter_sequence: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+# Maximum allowed error rate as value between 0 and 1 (no. of errors divided by length of matching region)
+cutadapt_error_rate: 0.1 #Maximum allowed error rate as value between 0 and 1
+
+# Run fastuniq (removes duplicates from paired-end samples)
+fastuniq: False
+# Filter samples against the phiX genome?
+phix_filter: True
+# Run SortMeRNA to identify (and filter) rRNA sequences
+sortmerna: False
+# Sortmerna produces files with reads aligning to rRNA ('rRNA' extension)
+# and not aligning to rRNA ('non_rRNA') extension
+# Which reads should be used for downstream analyses
+sortmerna_keep: 'non_rRNA'
+# Remove filtered reads (i.e. the reads NOT specified in 'keep:')
+sortmerna_remove_filtered: False
+# Databases to use for rRNA identification
+sortmerna_dbs: ["rfam-5s-database-id98.fasta","rfam-5.8s-database-id98.fasta","silva-arc-16s-id95.fasta","silva-arc-23s-id98.fasta","silva-bac-16s-id90.fasta","silva-bac-23s-id98.fasta","silva-euk-18s-id95.fasta","silva-euk-28s-id98.fasta"]
+# Put both paired reads into rRNA bin (paired_in) or both reads in other bin (paired_out)
+sortmerna_paired_strategy: "paired_in"
+# Additional parameters for sortmerna
+sortmerna_params: "--num_alignments 1"
