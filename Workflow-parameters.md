@@ -1,7 +1,8 @@
 The workflow can be configured using a configuration file in `yaml` format. These are the configuration parameters and their default values
 
 - [Paths](#paths)
-- [Preprocessing)(#preprocessing)
+- [Preprocessing](#preprocessing)
+- [Assembly](#assembly)
 
 ## Paths
 - `sample_list: samples/example_sample_list.tsv` 
@@ -65,12 +66,17 @@ Run [Trimmomatic](http://www.usadellab.org/cms/index.php?page=trimmomatic) to pe
 Also trim adapters from reads (in addition to quality trimming)?
 
 ***
-# Adapter type to trim from paired end libraries with trimmomatic
-# ["NexteraPE-PE", "TruSeq2-PE", "TruSeq3-PE", "TruSeq3-PE-2"]
-trimmomatic_pe_adapter: "TruSeq3-PE-2"
+
+- `trimmomatic_pe_adapter: "TruSeq3-PE-2"`
+
+Adapter type to trim from paired end libraries with trimmomatic. Choose from `NexteraPE-PE`, `TruSeq2-PE`, `TruSeq3-PE` and `TruSeq3-PE-2`.
+
+***
+
+- `trimmomatic_se_adapter: "TruSeq3-SE"`
+
 # Adapter type to trim from single end libraries with trimmomatic
 # ["TruSeq2-SE", "TruSeq3-SE"]
-trimmomatic_se_adapter: "TruSeq3-SE"
 # Trimmomatic parameters for trimming adapters on paired-end samples
 pe_adapter_params: "2:30:15"
 # Trimmomatic parameters for trimming adapters on single-end samples
