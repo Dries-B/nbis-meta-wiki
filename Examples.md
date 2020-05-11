@@ -28,7 +28,19 @@ megahit_additional_settings: '--min-contig-len 300 --prune-level 3'
 
 **Command:**
 ```bash
-snakemake --use-conda --configfile config.yaml
+snakemake --use-conda --configfile config.yaml -j 4 -p assembly
+```
+
+**Output:**
+```
+<results_path>
+|- assembly/               
+|  |- <assemblyGroup1>
+|  |- ...
+|  |- <assemblyGroupN>
+<report_path>
+|- |- assembly_stats.txt          table of assembly statistics         
+|  |- assembly_size_dist.txt      file with sizes of assemblies contained at different contig lengths
 ```
 
 ## Read-based analysis
