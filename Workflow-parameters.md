@@ -1,110 +1,123 @@
 The workflow can be configured using a configuration file in `yaml` format. These are the configuration parameters and their default values
 
+- [Sample list](#the-sample-list)
 - [Paths](#paths)
 - [Preprocessing](#preprocessing)
 - [Post-processing](#post-processing)
+  - [Trimmomatic](#trimmomatic)
+  - [Cutadapt](#cutadapt)
 - [Assembly](#assembly)
 - [Annotation](#annotation)
 
-## Paths
-- `sample_list: samples/example_sample_list.tsv` 
+## The sample list
+
+- `sample_list: config/samples.tsv` 
 
 Path to the sample list (**required**). See [Defining your samples in the sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-your-samples-in-the-sample-list) for instructions on how to format it for your data. By default this points to an example sample list for which the sequence data is generated as part of the workflow. Feel free to use it to get acquainted with the workflow.
 
-***
+## Paths
 
-- `workdir: .`
+```yaml
+paths:
+  # main base folder for results
+  results: "results"
+  # temporary path
+  # set to $TMPDIR, /scratch or equivalent when running on HPC clusters
+  temp: "temp"
+```
 
-Main working directory for the workflow. Set to the current directory (`.`) by default.
+- `results: results`
 
-***
+Path for main results. Output from preprocessing, assembly etc goes here. Summarized report files (_e.g._ plots and tables) are placed in a sub-directory called `report/`.
 
-- `results_path: results`
+- `temp: temp`
 
-Path for main results. Output from preprocessing, assembly etc goes here.
-
-***
-
-- `report_path: results/report`
-
-Path for report files. Output from *e.g.* MultiQC, assembly statistics and collated kraken results goes here.
-
-***
-
-- `intermediate_path: results/intermediate`
-
-Path to store intermediate files, *e.g.* intermediate fastq files created as part of preprocessing.
-
-***
-
-- `temp_path: temp`
-- `scratch_path: temp`
-
-Paths for temporary output. On compute clusters this can be set to `$TMPDIR`.
-
-***
-
-- `resource_path: resources`
-
-Path to store resource files, *e.g.* databases for tools such as `eggnog-mapper` and `pfam_scan`.
+Paths for temporary output. On compute clusters this can be set to `$TMPDIR` or equivalent.
 
 ## Preprocessing
 By default, the workflow runs `trimmomatic` for adapter and quality trimming, followed by `fastqc` for read statistics and [MultiQC](https://github.com/MultiQC) to aggregate and visualize logfiles. Depending on your needs you may however add, modify or remove preprocessing steps.
+
+```yaml
+preprocessing:
+  # run fastqc on (preprocessed) input?
+  # if no preprocessing is done, fastqc will be run on the raw reads
+  fastqc: True
+  # trim reads with trimmomatic? (quality and adapter trimming)
+  trimmomatic: True
+  # trim reads with cutadapt? (runs instead of trimmomatic, no quality trimming)
+  cutadapt: False
+  # run fastuniq (removes duplicates from paired-end samples)
+  fastuniq: False
+  # map reads agains the phix genome and keep only reads that do not map concordantly
+  phix_filter: False
+  # run SortMeRNA to identify (and filter) rRNA sequences
+  sortmerna: False
+```
 
 - `fastqc: True`
 
 Run [Fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) on preprocessed reads? If you do not wish to produce a sample report summary (*e.g.* if you have data that has already been preprocessed or that you know is of sufficient quality), set this to False.
 
-***
-
 - `trimmomatic: True`
 
 Run [Trimmomatic](http://www.usadellab.org/cms/index.php?page=trimmomatic) to perform adapter/quality trimming of reads.
 
-***
+- `cutadapt: False`
+
+
+### Trimmomatic
+```yaml
+trimmomatic:
+  # also trim adapters (in addition to quality trimming)?
+  trim_adapters: True
+  # settings specific to paired end reads
+  pe:
+    # adapter type to trim from paired end libraries with trimmomatic
+    # ["NexteraPE-PE", "TruSeq2-PE", "TruSeq3-PE", "TruSeq3-PE-2"]
+    adapter: "TruSeq3-PE-2"
+    # parameters for trimming adapters on paired-end samples
+    adapter_params: "2:30:15"
+    # parameters for trimming prior to adapter removal on paired-end samples
+    pre_adapter_params: ""
+    # parameters for trimming after adapter removal on paired-end samples
+    post_adapter_params: "LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:31"
+```
 
 - `trim_adapters: True`
 
 In addition to quality trimming, also trim adapters from reads?
 
-***
+The remaining settings for Trimmomatic are divided into parameters specific to paired-end data (`pe`) or single-end data (`se`).
 
-- `trimmomatic_pe_adapter: "TruSeq3-PE-2"`
+- `adapter:`
 
-Adapter type to trim from paired end libraries with trimmomatic. Choose from `NexteraPE-PE`, `TruSeq2-PE`, `TruSeq3-PE` and `TruSeq3-PE-2`.
+Adapter type to trim. For paired-end data choose from `NexteraPE-PE`, `TruSeq2-PE`, `TruSeq3-PE` and `TruSeq3-PE-2`. For single-end data choose from `TruSeq2-SE` and `TruSeq3-SE`.
 
-***
+- `adapter_params: "2:30:15"`
 
-- `trimmomatic_se_adapter: "TruSeq3-SE"`
+Trimmomatic parameters for trimming adapters. This translates into the `<seed mismatches>:<palindrome clip threshold>:<simple clip threshold>` settings for Trimmomatic.
 
-Adapter type to trim from single end libraries with trimmomatic. Choose from `TruSeq2-SE` and `TruSeq3-SE`
-
-***
-
-- `pe_adapter_params: "2:30:15"`
-- `se_adapter_params: "2:30:15"`
-
-Trimmomatic parameters for trimming adapters in paired-end (`pe`) and single-end (`se`) reads, respectively. This translates into the `<seed mismatches>:<palindrome clip threshold>:<simple clip threshold>` settings for Trimmomatic.
-
-***
-
-- `pe_pre_adapter_params: ""`
-- `se_pre_adapter_params: ""`
+- `pre_adapter_params: ""`
 
 Trimmomatic parameters for trimming prior to adapter removal in paired-end and single-end reads, respectively.
 
-***
-
-- `pe_post_adapter_params: "LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:31"`
-- `se_post_adapter_params: "LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:31"`
+- `post_adapter_params: "LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:31"`
 
 Trimmomatic parameters for trimming after adapter removal in paired-end and single-end reads, respectively.
 
-***
-
-- `cutadapt: False`
-
+### Cutadapt
 If you want to perform adapter trimming with [cutadapt](https://github.com/marcelm/cutadapt/) **instead of** Trimmomatic, set this to True. Note that this means no quality trimming is done.
+
+```yaml
+cutadapt:
+  # adapter sequence to trim with cutadapt
+  # shown here is for Illumina TruSeq Universal Adapter.
+  adapter_sequence: AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+  # reverse adapter sequence to trim with cutadapt
+  rev_adapter_sequence: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+  # maximum allowed error rate as value between 0 and 1 (no. of errors divided by length of matching region)
+  error_rate: 0.1 #Maximum allowed error rate as value between 0 and 1
+```
 
 ***
 
