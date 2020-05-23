@@ -13,33 +13,19 @@ Contents:
 
 ### Assemble reads with Megahit
 
-**Config:**
-```yaml
-# Number of threads to use for assembler
-assembly_threads: 20
-# Run Megahit assembler?
-megahit: True
-metaspades: False
-# Keep intermediate contigs from Megahit?
-megahit_keep_intermediate: False
-# Additional settings for Megahit
-megahit_additional_settings: '--min-contig-len 300 --prune-level 3'
-```
-
-**Command:**
 ```bash
-snakemake --use-conda --configfile config.yaml -j 4 -p assembly
+snakemake --use-conda --configfile config.yaml -j 4 -p assemble
 ```
 
 **Output:**
 ```
-<results_path>
+results
 |- assembly/               
 |  |- <assemblyGroup1>
 |  |- ...
 |  |- <assemblyGroupN>
-<report_path>
-|- |- assembly_stats.txt          table of assembly statistics         
+|- report/
+|  |- assembly_stats.txt          table of assembly statistics         
 |  |- assembly_size_dist.txt      file with sizes of assemblies contained at different contig lengths
 ```
 
@@ -51,15 +37,14 @@ The workflow runs the recently released version 3 of [Metaphlan](https://github.
 
 **Config:**
 ```yaml
-metaphlan: True
-metaphlan_index: "mpa_v30_CHOCOPhlAn_201901"
-metaphlan_plot_rank: "genus"
+classification:
+  metaphlan: True
 ```
 
 **Command:**
 
 ```bash
-snakemake --use-conda --configfile config.yaml -j 4 -p metaphlan_classify
+snakemake --use-conda --configfile config.yaml -j 4 -p classify
 ```
 
 **Output:**
