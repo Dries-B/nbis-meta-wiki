@@ -25,8 +25,9 @@ results
 |  |- ...
 |  |- <assemblyGroupN>
 |- report/
-|  |- assembly_stats.txt          table of assembly statistics         
-|  |- assembly_size_dist.txt      file with sizes of assemblies contained at different contig lengths
+|  |- assembly/
+|  |  |- assembly_stats.txt          table of assembly statistics         
+|  |  |- assembly_size_dist.txt      file with sizes of assemblies contained at different contig lengths
 ```
 
 ## Read-based analysis
@@ -49,10 +50,10 @@ snakemake --use-conda --configfile config.yaml -j 4 -p classify
 
 **Output:**
 ```
-<results_path>
+results
 |- metaphlan/               raw, per sample output from metaphlan 
 |
-<report_path>
+|- report/
 |- metaphlan/               
 |  |- metaphlan.tsv         clade relative abundances per sample
 |  |- metaphlan.pdf         clustermap of relative abundance summed to <metaphlan_plot_rank>
