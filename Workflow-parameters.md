@@ -8,6 +8,8 @@ The workflow can be configured using a configuration file in `yaml` format. Thes
   - [SortMeRNA](#sortmerna)
 - [Post-processing](#post-processing)
 - [Assembly](#assembly)
+  - [Megahit](#megahit)
+  - [Metaspades](#metaspades)
 - [Annotation](#annotation)
 
 ## The sample list
@@ -271,43 +273,42 @@ Additional settings for Metaspades. By default the workflow passes a list of kme
 ## Annotation
 The annotation part of the workflow refers primarily to open reading frames (ORFs) called on assembled metagenomics contigs by [prodigal](https://github.com/hyattpd/prodigal/). However, tRNA and rRNA genes are also identified using [tRNAscan-SE](http://lowelab.ucsc.edu/tRNAscan-SE/) and [Infernal](http://eddylab.org/infernal/), respectively.
 
-- `tRNAscan: True`
+```yaml
+annotation:
+  # run tRNAscan-SE?
+  tRNAscan: False
+  # run infernal for rRNA identification?
+  infernal: True
+  # run eggnog-mapper to infer KEGG orthologs, pathways and modules?
+  eggnog: False
+  # run PFAM-scan to infer protein families from PFAM?
+  pfam: True
+  # run Resistance gene identifier?
+  rgi: False
+  # run taxonomic annotation of assembled contigs (using tango + sourmash)?
+  taxonomy: False
+```
+
+- `tRNAscan: False`
 
 Identify tRNA genes on assembled contigs with [tRNAscan-SE](http://lowelab.ucsc.edu/tRNAscan-SE/)?
-
-***
 
 - `infernal: True`
 
 Run [Infernal](http://eddylab.org/infernal/) for rRNA identification? The workflow runs infernal with a small set of rRNA families (see the [Rfam](http://rfam.xfam.org/search?q=rRNA%20AND%20rna_type:%22rRNA%22%20AND%20entry_type:%22Family%22) database).
 
-# Threads to use for infernal
-infernal_threads: 8
-# Where to store infernal database
-infernal_dbpath: resources/infernal
-# Run eggnog-mapper?
-eggnog: True
-# Run PFAM-scan?
-pfam: True
-# Run Resistance gene identifier?
-rgi: False
-# Parameters for rgi
-rgi_params: "-a diamond --local --clean --input_type protein"
-# Run taxonomic annotation of assembled contigs (using tango + sourmash)?
-taxonomic_annotation: True
-# Minimum length of contigs to use for taxonomic annotation
-taxonomy_min_len: 500
-# Parameters for tango search
-tango_search_params: "--evalue 0.01 --top 10"
-# Parameters for tango assigner
-tango_assign_params: "--evalue 0.001 --top 5"
-# Ranks to report taxonomy for
-taxonomy_ranks: ["superkingdom","phylum","class","order","family","genus","species"]
-# Protein database to use for taxonomic assignments
-# Choose between uniref50, uniref90, uniref100 and nr.
-taxdb: uniref100
-# Threads to use for diamond
-diamond_threads: 20
+- `eggnog: False` 
 
+Run [eggnog-mapper](https://github.com/eggnogdb/eggnog-mapper/) to add functional annotations to ORFs.
 
+- `pfam: True`
 
+Run [pfam_scan](https://anaconda.org/bioconda/pfam_scan) to infer PFAM protein families for ORFs.
+
+- `rgi: False`
+
+Run the [Resistance Gene Identifier tool](https://card.mcmaster.ca/) for ORFs.
+
+- `taxonomy: False`
+
+Add taxonomic annotations for contigs/ORFs using [tango](https://github.com/NBISweden/tango) + [sourmash](https://sourmash.readthedocs.io/en/latest/).
