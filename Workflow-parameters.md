@@ -3,9 +3,10 @@ The workflow can be configured using a configuration file in `yaml` format. Thes
 - [Sample list](#the-sample-list)
 - [Paths](#paths)
 - [Preprocessing](#preprocessing)
-- [Post-processing](#post-processing)
   - [Trimmomatic](#trimmomatic)
   - [Cutadapt](#cutadapt)
+  - [SortMeRNA](#sortmerna)
+- [Post-processing](#post-processing)
 - [Assembly](#assembly)
 - [Annotation](#annotation)
 
@@ -60,10 +61,23 @@ Run [Fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) on prep
 
 - `trimmomatic: True`
 
-Run [Trimmomatic](http://www.usadellab.org/cms/index.php?page=trimmomatic) to perform adapter/quality trimming of reads.
+Run [Trimmomatic](http://www.usadellab.org/cms/index.php?page=trimmomatic) to perform adapter/quality trimming of reads. ([see specific Trimmomatic params](#trimmomatic))
 
 - `cutadapt: False`
 
+If you want to perform adapter trimming with [cutadapt](https://github.com/marcelm/cutadapt/) **instead of** Trimmomatic, set this to True. Note that this means no quality trimming is done ([see specific Cutadapt params](#cutadapt))
+
+- `fastuniq: False`
+
+Run [fastuniq](https://sourceforge.net/projects/fastuniq/) to remove duplicates from paired-end samples.
+
+- `phix_filter: True`
+
+Map reads with bowtie2 against the phiX genome and remove reads that map concordantly.
+
+- `sortmerna: False`
+
+Run [SortMeRNA](https://github.com/biocore/sortmerna) to identify (and filter) rRNA sequences from samples ([see specific SortMeRNA params](#sortmerna))
 
 ### Trimmomatic
 ```yaml
@@ -106,8 +120,6 @@ Trimmomatic parameters for trimming prior to adapter removal in paired-end and s
 Trimmomatic parameters for trimming after adapter removal in paired-end and single-end reads, respectively.
 
 ### Cutadapt
-If you want to perform adapter trimming with [cutadapt](https://github.com/marcelm/cutadapt/) **instead of** Trimmomatic, set this to True. Note that this means no quality trimming is done.
-
 ```yaml
 cutadapt:
   # adapter sequence to trim with cutadapt
@@ -119,121 +131,142 @@ cutadapt:
   error_rate: 0.1 #Maximum allowed error rate as value between 0 and 1
 ```
 
-***
-
 - `adapter_sequence: AGATCGGAAGAGCACACGTCTGAACTCCAGTCA`
 - `rev_adapter_sequence: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT`
 
 Forward and reverse adapter sequences to trim with cutadapt. Defaults to the Illumina TruSeq Adapters.
 
-***
-
-- `cutadapt_error_rate: 0.1` 
+- `error_rate: 0.1` 
 
 Maximum allowed error rate for cutadapt as value between 0 and 1. This is the number of errors divided by length of matching region.
 
-***
 
-- `fastuniq: False`
+### SortMeRNA
+```yaml
+sortmerna:
+  # sortmerna produces files with reads aligning to rRNA ("rRNA" extension)
+  # and not aligning to rRNA ("non_rRNA") extension
+  # which reads should be used for downstream analyses
+  keep: "non_rRNA"
+  # remove filtered reads (i.e. the reads NOT specified in "keep:")
+  # if you are filtering out rRNA reads and don't plan to use them downstream
+  # it may be worthwhile to set this to True since they can take up a lot of disk space
+  remove_filtered: False
+  # databases to use for rRNA identification
+  dbs:
+    - "rfam-5s-database-id98.fasta"
+    - "rfam-5.8s-database-id98.fasta"
+    - "silva-arc-16s-id95.fasta"
+    - "silva-arc-23s-id98.fasta"
+    - "silva-bac-16s-id90.fasta"
+    - "silva-bac-23s-id98.fasta"
+    - "silva-euk-18s-id95.fasta"
+    - "silva-euk-28s-id98.fasta"
+  # put both paired reads into rRNA bin (paired_in) or both reads in other bin (paired_out)
+  paired_strategy: "paired_in"
+  # extra settings for sortmerna
+  extra_settings: "--num_alignments 1"
+```
 
-Run [fastuniq](https://sourceforge.net/projects/fastuniq/) to remove duplicates from paired-end samples.
-
-***
-
-- `phix_filter: True`
-
-Map reads with bowtie2 against the phiX genome and remove reads that map concordantly.
-
-***
-
-- `sortmerna: False`
-
-Run [SortMeRNA](https://github.com/biocore/sortmerna) to identify (and filter) rRNA sequences from samples. 
-
-***
-
-- `sortmerna_keep: 'non_rRNA'`
+- `keep: 'non_rRNA'`
 
 SortMeRNA produces files with reads aligning to rRNA (`rRNA`) and not aligning to rRNA (`non_rRNA`). This parameter indicates which of these to keep for downstream analyses.
 
-***
-
-- `sortmerna_remove_filtered: False`
+- `remove_filtered: False`
 
 Set to True to remove the set of reads **not** specified with `sortmerna_keep`. For instance, if you only want to keep the `non_rRNA` reads and remove the `rRNA` fraction, set `sortmerna_keep: 'non_rRNA'
 
-***
-
-- `sortmerna_dbs: ["rfam-5s-database-id98.fasta","rfam-5.8s-database-id98.fasta","silva-arc-16s-id95.fasta","silva-arc-23s-id98.fasta","silva-bac-16s-id90.fasta","silva-bac-23s-id98.fasta","silva-euk-18s-id95.fasta","silva-euk-28s-id98.fasta"]`
+- `dbs: ["rfam-5s-database-id98.fasta","rfam-5.8s-database-id98.fasta","silva-arc-16s-id95.fasta","silva-arc-23s-id98.fasta","silva-bac-16s-id90.fasta","silva-bac-23s-id98.fasta","silva-euk-18s-id95.fasta","silva-euk-28s-id98.fasta"]`
 
 Which databases to use for rRNA identification. By default, all available databases are used.
 
-***
-
-- `sortmerna_paired_strategy: "paired_in"`
+- `paired_strategy: "paired_in"`
 
 How should SortMeRNA handle paired-end reads where only one read gets assigned to the rRNA fraction? Either put both paired reads into rRNA bin (`paired_in`) or put both reads in other bin (`paired_out`).
 
-***
+- `extra_settings "--num_alignments 1"`
 
-- `sortmerna_params: "--num_alignments 1"`
-
-Additional parameters for SortMeRNA. Here you can pass other settings not covered by the parameters above.
+Additional settings for SortMeRNA. Here you can pass other settings not covered by the parameters above.
 
 ## Post-processing
 Post-processing is done at the bam-file level after reads have been mapped to assembled contigs.
 
-- `markduplicates: True`
+`remove_duplicates: True`
 
 Runs the MarkDuplicates tool from the [picard](https://broadinstitute.github.io/picard/) suite to remove duplicates from bam-files.
 
 ## Assembly
+Preprocessed reads can be assembled using either Megahit or Metaspades.
 
-- `assembly_threads: 20`
-
-Threads to use for assembler.
-
-***
+```yaml
+assembly:
+  # run Megahit assembler?
+  megahit: True
+  # Use Metaspades instead of Megahit for assembly?
+  metaspades: False
+```
 
 - `megahit: True`
 
 Assemble reads using [Megahit](https://github.com/voutcn/megahit)?
 
-***
-
-- `megahit_keep_intermediate: False`
-
-Should intermediate contigs (*i.e.* contigs from running on intermediate kmer lengths) from Megahit be stored? If True, the contigs will be placed under a folder `assembly/` in the path specified with `intermediate_path` (see above).
-
-***
-
-- `megahit_additional_settings: '--min-contig-len 300 --prune-level 3'`
-
-Additional settings for Megahit. Use this to control behaviour of the assembler outside of the parameters specified above.
-
-***
-
 - `metaspades: False`
 
 Should the [Metaspades](https://github.com/ablab/spades) assembler be used? **Note**: if True this runs Metaspades instead of Megahit.
 
-***
 
-- `metaspades_keep_intermediate: False`
+### Megahit
+```yaml
+megahit:
+  # maximum threads for megahit
+  threads: 20
+  # keep intermediate contigs from Megahit?
+  keep_intermediate: False
+  # extra settings passed to Megahit
+  extra_settings: "--min-contig-len 300 --prune-level 3"
+```
+
+- `threads: 20`
+
+Maximum number of cpus to use for Megahit.
+
+- `keep_intermediate: False`
+
+Should intermediate contigs (*i.e.* contigs from running on intermediate kmer lengths) from Megahit be stored? If True, the contigs will be placed under a folder `assembly/` in the path specified with `intermediate_path` (see above).
+
+- `extra_settings: '--min-contig-len 300 --prune-level 3'`
+
+Additional settings for Megahit. Use this to control behaviour of the assembler outside of the parameters specified above.
+
+### Metaspades
+
+```yaml
+metaspades:
+  # maximum threads for metaspades
+  threads: 20
+  # keep intermediate contigs from Metaspades?
+  keep_intermediate: False
+  # keep corrected reads produced during Metaspades assembly?
+  keep_corrected: True
+  # extra settings passed to Metaspades
+  extra_settings: "-k 21,31,41,51,61,71,81,91,101,111,121"
+```
+
+- `threads: 20`
+
+Maximum number of threads to use for Metaspades.
+
+- `keep_intermediate: False`
 
 Should intermediate contigs from Metaspades be stored? If True, the contigs will be placed under a folder `assembly/` in the path specified with `intermediate_path` (see above).
 
-***
-
-- `metaspades_keep_corrected: True`
+- `keep_corrected: True`
 
 Should corrected reads produced during Metaspades assembly be stored?
 
-***
+- `extra_settings: '-k 21,31,41,51,61,71,81,91,101,111,121'`
 
-- `metaspades_additional_settings: '-k 21,31,41,51,61,71,81,91,101,111,121'`
-
-Additional settings for Metaspades.
+Additional settings for Metaspades. By default the workflow passes a list of kmer sizes.
 
 ## Annotation
 The annotation part of the workflow refers primarily to open reading frames (ORFs) called on assembled metagenomics contigs by [prodigal](https://github.com/hyattpd/prodigal/). However, tRNA and rRNA genes are also identified using [tRNAscan-SE](http://lowelab.ucsc.edu/tRNAscan-SE/) and [Infernal](http://eddylab.org/infernal/), respectively.
