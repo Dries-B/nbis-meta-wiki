@@ -95,20 +95,14 @@ centrifuge:
 
 ## Configure workflow for the SLURM Workload Manager
 
-1. Create a directory to hold the profile:
-
-```
-mkdir profiles
-```
-
-2. Install and activate cookiecutter with conda:
+1. Install and activate cookiecutter with conda:
 
 ```
 conda create -n cc -c conda-forge cookiecutter
 conda activate cc
 ```
 
-3. Install the snakemake profile into the profiles/ directory:
+2. Install the snakemake profile into the profiles/ directory:
 
 ```
 cookiecutter -o profiles https://github.com/Snakemake-Profiles/slurm.git
