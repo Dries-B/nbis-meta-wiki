@@ -22,7 +22,27 @@ This installs the necessary files for release `31.0`. Check the directories unde
 
 **Kraken database**
 
-For `kraken` there are a number of databases installed under `/sw/data/Kraken2`. Monthly snapshots of the `standard`, `nt`, `rdp`, `silva` and `greengenes`. 
+For `kraken` there are a number of databases installed under `/sw/data/Kraken2`. Snapshots of the `standard`, `nt`, `rdp`, `silva` and `greengenes` indices are installed on a monthly basis. To use the latest version of the standard index, do the following:
+
+1. Create a sub-directory and link the index files
+
+```bash
+mkdir -p resources/kraken/standard
+ln -s /sw/data/Kraken2/latest/*.k2d resources/kraken/standard/
+```
+
+2. From a reproducibility perspective it's essential to keep track of when the index was created, so generate a version file inside your kraken directory by running:
+```bash
+file /sw/data/Kraken2/latest | egrep -o "[0-9]{8}\-[0-9]{6}" > resources/kraken/standard/kraken.version
+```
+
+3. Modify your config file to:
+
+```yaml
+kraken:
+  # generate the standard kraken database?
+  standard_db: True
+```
 
 ## Configure workflow for the SLURM Workload Manager
 
