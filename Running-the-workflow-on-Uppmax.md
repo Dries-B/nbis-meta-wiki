@@ -44,6 +44,22 @@ kraken:
   standard_db: True
 ```
 
+Using any of the other non-standard databases from the central location is also a simple process, _e.g._ for the latest SILVA index:
+
+```bash
+mkdir -p resources/kraken/silva
+ln -s /sw/data/Kraken2/latest_silva/*.k2d resources/kraken/silva/
+file /sw/data/Kraken2/latest_silva | egrep -o "[0-9]{8}\-[0-9]{6}" > resources/kraken/silva/kraken.version
+```
+
+Then update your config file with: 
+
+```yaml
+kraken:
+  standard_db: False
+  custom: "resources/kraken/silva"
+```
+
 ## Configure workflow for the SLURM Workload Manager
 
 1. Create a directory to hold the profile:
