@@ -60,6 +60,8 @@ kraken:
   custom: "resources/kraken/silva"
 ```
 
+Now you're ready
+
 ## Configure workflow for the SLURM Workload Manager
 
 1. Create a directory to hold the profile:
