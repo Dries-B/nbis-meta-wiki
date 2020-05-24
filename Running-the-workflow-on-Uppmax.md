@@ -1,7 +1,10 @@
 ## Overview
 If you will be running the workflow on the [Uppmax](https://uppmax.uu.se/) HPC clusters here are some helpful tips.
 
-## Setting up the database files
+- [Setting up database files](#setting-up-database-files)
+- [Configure workflow for SLURM](#Configure-workflow-for-the-slurm-workload-manager)
+
+## Setting up database files
 All resources required to run this workflow are automatically downloaded as needed when the workflow is executed. However, some of these (often large) files are already installed in a central location on the system at `/sw/data`. This means that you can make use of them for your workflow runs thereby saving you time and reducing overall disk-usage for the system.
 
 First create a resource directory inside the base dir of the cloned git repository:
@@ -101,8 +104,8 @@ mkdir profiles
 2. Install and activate cookiecutter with conda:
 
 ```
-conda env create -f envs/cookiecutter.yml
-conda activate cookiecutter
+conda create -n cc -c conda-forge cookiecutter
+conda activate cc
 ```
 
 3. Install the snakemake profile into the profiles/ directory:
