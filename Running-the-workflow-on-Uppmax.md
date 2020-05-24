@@ -66,6 +66,7 @@ kraken:
 ```
 
 **Centrifuge database**
+
 There are several centrifuge indices on Uppmax located at `/sw/data/Centrifuge-indices/20180720/`, but keep in mind that they are from 2018.
 
 The available indices are: `p_compressed`, `p_compressed+h+v`, `p+h+v`, and `p+v` (see the [centrifuge manual](https://ccb.jhu.edu/software/centrifuge/manual.shtml) for information on what these contain).
