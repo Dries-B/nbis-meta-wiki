@@ -11,6 +11,7 @@ The workflow can be configured using a configuration file in `yaml` format. Thes
   - [Megahit](#megahit)
   - [Metaspades](#metaspades)
 - [Annotation](#annotation)
+  - [Taxonomy](#taxonomy)
 
 ## The sample list
 
@@ -63,11 +64,11 @@ Run [Fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) on prep
 
 - `trimmomatic: True`
 
-Run [Trimmomatic](http://www.usadellab.org/cms/index.php?page=trimmomatic) to perform adapter/quality trimming of reads. ([see specific Trimmomatic params](#trimmomatic))
+Run [Trimmomatic](http://www.usadellab.org/cms/index.php?page=trimmomatic) to perform adapter/quality trimming of reads. (see specific settings [here](#trimmomatic))
 
 - `cutadapt: False`
 
-If you want to perform adapter trimming with [cutadapt](https://github.com/marcelm/cutadapt/) **instead of** Trimmomatic, set this to True. Note that this means no quality trimming is done ([see specific Cutadapt params](#cutadapt))
+If you want to perform adapter trimming with [cutadapt](https://github.com/marcelm/cutadapt/) **instead of** Trimmomatic, set this to True. Note that this means no quality trimming is done (see specific settings [here](#cutadapt))
 
 - `fastuniq: False`
 
@@ -79,7 +80,7 @@ Map reads with bowtie2 against the phiX genome and remove reads that map concord
 
 - `sortmerna: False`
 
-Run [SortMeRNA](https://github.com/biocore/sortmerna) to identify (and filter) rRNA sequences from samples ([see specific SortMeRNA params](#sortmerna))
+Run [SortMeRNA](https://github.com/biocore/sortmerna) to identify (and filter) rRNA sequences from samples (see specific settings [here](#sortmerna))
 
 ### Trimmomatic
 ```yaml
@@ -311,4 +312,43 @@ Run the [Resistance Gene Identifier tool](https://card.mcmaster.ca/) for ORFs.
 
 - `taxonomy: False`
 
-Add taxonomic annotations for contigs/ORFs using [tango](https://github.com/NBISweden/tango) + [sourmash](https://sourmash.readthedocs.io/en/latest/).
+Add taxonomic annotations for contigs/ORFs using [tango](https://github.com/NBISweden/tango) + [sourmash](https://sourmash.readthedocs.io/en/latest/) (see specfic settings [here](#taxonomy))
+
+### Taxonomy
+Taxonomy is assigned to contigs using `tango` which is based on blastx searches against either UniRef or nr, and `sourmash` which is based on MinHash sketches of reference genomes and contigs. The former performs relatively well on short contigs (_e.g._ 500 - 50,000 bp) while the latter is suited primarily for long contigs (_e.g._ >50,000 bp). The workflow combines assignments from both tools, with `sourmash` taking preference.
+
+```yaml
+taxonomy:
+  # minimum length of contigs to use for taxonomic annotation
+  min_len: 300
+  # parameters for tango search
+  # use more permissive settings for search compared to assign in order to
+  # modify assignments without having to rerun the search step
+  search_params: "--evalue 0.01 --top 10"
+  # parameters for tango assign
+  assign_params: "--evalue 0.001 --top 5"
+  # hash fraction to use for sourmash when computing signatures for contigs
+  # this is evaluated as 1/<sourmash_fraction>
+  sourmash_fraction: 100
+  # ranks to report taxonomy for
+  ranks:
+    - "superkingdom"
+    - "phylum"
+    - "class"
+    - "order"
+    - "family"
+    - "genus"
+    - "species"
+  # protein database to use for taxonomic assignments
+  # choose between uniref50, uniref90, uniref100 and nr.
+  taxdb: "uniref100"
+```
+
+- `min_len: 300` 
+
+Minimum length of contigs to include in taxonomic assignments. Really only applies to the `tango` part of taxonomic assignment, but in practice `sourmash` will not be able to assign taxonomy to short contigs anyway.
+
+- `search_params: --evalue 0.01 --top 10`
+- `assign_params: --evalue 0.001 --top 5`
+
+These are settings used in the search and assign stages by `tango`. The `search_params` are passed directly to `diamond blastx` and refer to the Expect value and the range of alignments to include (`--top 10` means that alignments scoring at most 10% lower than the best score are considered for a query). The `assign_params` are used by `tango` in a second step. By using more permissive search parameters the assignment step of the workflow can be re-run without having to re-run also the (often time-consuming) first search step.
