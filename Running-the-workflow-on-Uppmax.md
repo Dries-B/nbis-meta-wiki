@@ -68,6 +68,23 @@ kraken:
 **Centrifuge database**
 There are several centrifuge indices on Uppmax located at `/sw/data/Centrifuge-indices/20180720/`, but keep in mind that they are from 2018.
 
+The available indices are: `p_compressed`, `p_compressed+h+v`, `p+h+v`, and `p+v` (see the [centrifuge manual](https://ccb.jhu.edu/software/centrifuge/manual.shtml) for information on what these contain).
+
+To use the `p_compressed` index, run:
+
+```bash
+mkdir -p resources/centrifuge/p_compressed/
+ln -s /sw/data/Centrifuge-indices/20180720/p_compressed.*.cf resources/centrifuge/p_compressed/
+```
+Then update your config file to contain:
+```yaml
+classification:
+  centrifuge: True
+
+centrifuge:
+  custom: "resources/centrifuge/p_compressed/p_compressed"
+```
+
 **eggNOG**
 
 **GTDB**
