@@ -36,13 +36,18 @@ ln -s /sw/data/Kraken2/latest/*.k2d resources/kraken/standard/
 file /sw/data/Kraken2/latest | egrep -o "[0-9]{8}\-[0-9]{6}" > resources/kraken/standard/kraken.version
 ```
 
-3. Modify your config file to:
+3. Modify your config file so that it contains:
 
 ```yaml
+classification:
+  kraken: True
+
 kraken:
   # generate the standard kraken database?
   standard_db: True
 ```
+
+_Non-standard databases_
 
 Using any of the other non-standard databases from the central location is also a simple process, _e.g._ for the latest SILVA index:
 
@@ -59,8 +64,6 @@ kraken:
   standard_db: False
   custom: "resources/kraken/silva"
 ```
-
-Now you're ready
 
 ## Configure workflow for the SLURM Workload Manager
 
