@@ -11,12 +11,18 @@ mkdir resources
 
 **Pfam database**
 
-To use the Pfam database from the central location, create a `pfam` sub-directory under `resources` and link the necessary files from the central location:
+To use the Pfam database from the central location, create a `pfam` sub-directory under `resources` and link the necessary files from the central location, run the following:
 ```bash
 mkdir resources/pfam
-ln -s 
+ln -s /sw/data/Pfam/31.0/Pfam-A.hmm* resources/pfam/
+cat /sw/data/Pfam/31.0/Pfam.version > resources/pfam/Pfam-A.version
 ```
 
+This installs the necessary files for release `31.0`. Check the directories under `/sw/data/Pfam/` to see available releases.
+
+**Kraken database**
+
+For `kraken` there are a number of databases installed under `/sw/data/Kraken2`. Monthly snapshots of the `standard`, `nt`, `rdp`, `silva` and `greengenes`. 
 
 ## Configure workflow for the SLURM Workload Manager
 
