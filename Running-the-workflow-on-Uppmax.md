@@ -65,6 +65,13 @@ kraken:
   custom: "resources/kraken/silva"
 ```
 
+**Centrifuge database**
+There are several centrifuge indices on Uppmax located at `/sw/data/Centrifuge-indices/20180720/`, but keep in mind that they are from 2018.
+
+**eggNOG**
+
+**GTDB**
+
 ## Configure workflow for the SLURM Workload Manager
 
 1. Create a directory to hold the profile:
