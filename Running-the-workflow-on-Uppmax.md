@@ -95,19 +95,15 @@ centrifuge:
 
 ## Configure workflow for the SLURM Workload Manager
 
-1. Install and activate cookiecutter with conda:
+The workflow comes with the [SLURM snakemake profile](https://github.com/Snakemake-Profiles/slurm) pre-installed. All you have to do is to modify the `config/cluster.yaml` file and insert your cluster account ID:
 
-```
-conda create -n cc -c conda-forge cookiecutter
-conda activate cc
-```
-
-2. Install the snakemake profile into the profiles/ directory:
-
-```
-cookiecutter -o profiles https://github.com/Snakemake-Profiles/slurm.git
+```yaml
+__default__:
+  account: staff # <-- exchange staff with your SLURM account id
 ```
 
-You will be prompted for the account to charge compute hours to as well
-as the default partition. Once this is done you can run snakemake on
-the cluster using `snakemake --profile profiles/slurm -j 100`.
+Then you can run the workflow with `--profile slurm` from the root of the git repo, _e.g._:
+
+```bash
+snakemake --profile slurm -j 100 --configfile myconfig.yaml
+```
