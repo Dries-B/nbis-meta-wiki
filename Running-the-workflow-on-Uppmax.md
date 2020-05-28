@@ -89,9 +89,14 @@ centrifuge:
   custom: "resources/centrifuge/p_compressed/p_compressed"
 ```
 
-**eggNOG**
-
 **GTDB**
+
+To use the centrally installed GTDB release on Uppmax, do:
+
+```bash
+mkdir -p resources/gtdb
+ln -s /sw/data/GTDB/R04-RS89/rackham/release89/* resources/gtdb/
+```
 
 ## Configure workflow for the SLURM Workload Manager
 
