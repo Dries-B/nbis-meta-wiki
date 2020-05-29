@@ -362,7 +362,7 @@ This setting determines how much sourmash will compress the signatures of your c
 
 - `ranks:`
 
-This is a list of ranks that the workflow will report assignments for. Higher ranks in the taxonomy hierarchy are inferred from lower ranks, such that a contig with the lowest assignment at the genus level, for example `Escherichia`, the higher ranks become `family=Enterobacteriaceae`, `order:Enterobacterales`, `class:Gammaproteobacteria`, `phylum:Proteobacteria`, `superkingdom:Bacteria` and the assignment at species level becomes `species:Unclassified.Escherichia`.
+This is a list of ranks that the workflow will report assignments for. Higher ranks in the taxonomy hierarchy are inferred from lower ranks, such that a contig with the lowest assignment at the genus level, for example `Escherichia`, the higher ranks become `family:Enterobacteriaceae`, `order:Enterobacterales`, `class:Gammaproteobacteria`, `phylum:Proteobacteria`, `superkingdom:Bacteria` and the assignment at species level becomes `species:Unclassified.Escherichia`.
 
 - `taxdb: uniref100`
 
