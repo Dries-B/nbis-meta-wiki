@@ -4,6 +4,8 @@ If you will be running the workflow on the [Uppmax](https://uppmax.uu.se/) HPC c
 - [Setting up database files](#setting-up-database-files)
   - [Pfam](#pfam-database)
   - [Kraken](#kraken-database)
+  - [Centrifuge](#centrifuge-database)
+  - [GTDB](#gtdb)
 - [Configure workflow for SLURM](#Configure-workflow-for-the-slurm-workload-manager)
 
 ## Setting up database files
@@ -70,7 +72,7 @@ kraken:
   custom: "resources/kraken/silva"
 ```
 
-**Centrifuge database**
+### Centrifuge database
 
 There are several centrifuge indices on Uppmax located at `/sw/data/Centrifuge-indices/20180720/`, but keep in mind that they are from 2018.
 
@@ -91,7 +93,7 @@ centrifuge:
   custom: "resources/centrifuge/p_compressed/p_compressed"
 ```
 
-**GTDB**
+### GTDB
 
 To use the centrally installed Genome Taxonomy Database (GTDB) release on Uppmax, do:
 
