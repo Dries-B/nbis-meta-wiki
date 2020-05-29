@@ -354,6 +354,20 @@ Minimum length of contigs to include in taxonomic assignments. Really only appli
 
 These are settings used in the search and assign stages by `tango`. The `search_params` are passed directly to `diamond blastx` and refer to the Expect value and the range of alignments to include (`--top 10` means that alignments scoring at most 10% lower than the best score are considered for a query). The `assign_params` are used by `tango` in a second step. By using more permissive search parameters the assignment step of the workflow can be re-run without having to re-run also the (often time-consuming) first search step.
 
+- `sourmash_fraction: 100` 
+
+This setting determines how much sourmash will compress the signatures of your contigs before performing classification. An example from the sourmash manual is:
+
+> if you have a 5 Mbp genome and use --scaled 1000, you will extract approximately 5000 hashes. So a scaled of 1000 is equivalent to using -n 5000 with mash on a 5 Mbp genome.
+
+- `ranks:`
+
+This is a list of ranks that the workflow will report assignments for. Higher ranks in the taxonomy hierarchy are inferred from lower ranks, such that a contig with the lowest assignment at the genus level, for example `Escherichia`, the higher ranks become `family=Enterobacteriaceae`, `order:Enterobacterales`, `class:Gammaproteobacteria`, `phylum:Proteobacteria`, `superkingdom:Bacteria` and the assignment at species level becomes `species:Unclassified.Escherichia`.
+
+- `taxdb: uniref100`
+
+This refers to the protein database to use for assigning taxonomy to ORFs. By default the `uniref100` database is used, but the workflow supports the use of `uniref90`, `uniref50` and the non-redundant `nr` database.
+
 ### Binning
 Assembled contigs can be binned into collections representing estimates of genomes in the sample(s). The workflow has support for the use of three binners: [Metabat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [CONCOCT](https://github.com/BinPro/CONCOCT) and [MaxBin2](https://sourceforge.net/projects/maxbin2/). These binners all use the nucleotide composition of contigs and their differential abundance in samples to bin contigs. You can configure the workflow to use one or more of these tools, with one or more minimum length threshold for contigs to include in the binning. Please note however that currently, neither CONCOCT nor MaxBin2 work on OSX.
 
