@@ -383,3 +383,7 @@ binning:
   # run gtdbtk to classify bins phylogenetically?
   gtdbtk: False
 ```
+
+- `contig_lengths:` 
+
+This is the minimum length threshold of contigs to include by any of the binners. Setting this to a low threshold will likely lead to more sequences in your assembly being binned, but could come at the cost of higher contamination of the bins. The minimum possible setting is 1500 bp. The optimal setting will vary depending on your sample and the assembly so it may be a good idea to use several cutoffs and evaluate which one gives the best results (_e.g._ highest completeness and purity). Output from binning is placed in your main results directory under: `binning/<binning-tool>/<assembly-name>/<length-threshold>/`.
