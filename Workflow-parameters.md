@@ -12,6 +12,7 @@ The workflow can be configured using a configuration file in `yaml` format. Thes
   - [Metaspades](#metaspades)
 - [Annotation](#annotation)
   - [Taxonomy](#taxonomy)
+- [Binning](#binning)
 
 ## The sample list
 
@@ -352,3 +353,33 @@ Minimum length of contigs to include in taxonomic assignments. Really only appli
 - `assign_params: --evalue 0.001 --top 5`
 
 These are settings used in the search and assign stages by `tango`. The `search_params` are passed directly to `diamond blastx` and refer to the Expect value and the range of alignments to include (`--top 10` means that alignments scoring at most 10% lower than the best score are considered for a query). The `assign_params` are used by `tango` in a second step. By using more permissive search parameters the assignment step of the workflow can be re-run without having to re-run also the (often time-consuming) first search step.
+
+### Binning
+Assembled contigs can be binned into collections representing estimates of genomes in the sample(s). The workflow has support for the use of three binners: [Metabat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [CONCOCT](https://github.com/BinPro/CONCOCT) and [MaxBin2](https://sourceforge.net/projects/maxbin2/). These binners all use the nucleotide composition of contigs and their differential abundance in samples to bin contigs. You can configure the workflow to use one or more of these tools, with one or more minimum length threshold for contigs to include in the binning. Please note however that currently, neither CONCOCT nor MaxBin2 work on OSX.
+
+The workflow can also run [checkm](https://github.com/Ecogenomics/CheckM/wiki) to investigate completeness, purity and other metrics of the binned genomes. It also supports the classification of bins with [GTDB-TK](https://ecogenomics.github.io/GTDBTk/).
+
+```yaml
+binning:
+  # minimum contig lengths to use for binning. binning will be run for every
+  # length threshold with output under <results_path>/binning/{binner}/{contig_length}
+  # typically shorter contig lengths will result in more a larger share of the
+  # assembly being binned, at the cost of bin purity
+  contig_lengths:
+    - 1500
+    # uncomment and/or add below to run binning at more lengths
+    #- 2500
+    #- 5000
+  # run Metabat2 binner?
+  metabat: False
+  # run CONCOCT binner?
+  concoct: False
+  # run MaxBin2 binner?
+  maxbin: False
+  # maximum threads for binners
+  threads: 20
+  # run Checkm to assess quality of bins?
+  checkm: False
+  # run gtdbtk to classify bins phylogenetically?
+  gtdbtk: False
+```
