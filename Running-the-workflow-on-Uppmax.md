@@ -2,6 +2,8 @@
 If you will be running the workflow on the [Uppmax](https://uppmax.uu.se/) HPC clusters here are some helpful tips.
 
 - [Setting up database files](#setting-up-database-files)
+  - [Pfam](#pfam-database)
+  - [Kraken](#kraken-database)
 - [Configure workflow for SLURM](#Configure-workflow-for-the-slurm-workload-manager)
 
 ## Setting up database files
@@ -12,7 +14,7 @@ First create a resource directory inside the base dir of the cloned git reposito
 mkdir resources
 ```
 
-**Pfam database**
+### Pfam database
 
 To use the Pfam database from the central location, create a `pfam` sub-directory under `resources` and link the necessary files from the central location, run the following:
 ```bash
@@ -23,7 +25,7 @@ cat /sw/data/Pfam/31.0/Pfam.version > resources/pfam/Pfam-A.version
 
 This installs the necessary files for release `31.0`. Check the directories under `/sw/data/Pfam/` to see available releases.
 
-**Kraken database**
+### Kraken database
 
 For `kraken` there are a number of databases installed under `/sw/data/Kraken2`. Snapshots of the `standard`, `nt`, `rdp`, `silva` and `greengenes` indices are installed on a monthly basis. To use the latest version of the standard index, do the following:
 
@@ -91,11 +93,17 @@ centrifuge:
 
 **GTDB**
 
-To use the centrally installed GTDB release on Uppmax, do:
+To use the centrally installed Genome Taxonomy Database (GTDB) release on Uppmax, do:
 
 ```bash
 mkdir -p resources/gtdb
 ln -s /sw/data/GTDB/R04-RS89/rackham/release89/* resources/gtdb/
+```
+
+Then make sure your config file contains:
+```yaml
+binning:
+  gtdbtk: True
 ```
 
 ## Configure workflow for the SLURM Workload Manager
