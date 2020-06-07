@@ -1,16 +1,27 @@
 # Overview
 Here are a few common examples. They are written in a structure showing the relevant config parameters, the command(s) to run and the expected output. All examples assume you have updated a configuration file called `config.yaml` with the appropriate parameters, but you may of course use any config file name you want.
 
+## Contents
+
+- [Targets](#targets)
+- [Assembly-based analysis](#assembly-based-analysis)
+  - [Megahit](#assemble-reads-with-megahit)
+- [Read-based analysis](#read-based-analysis)
+  - [Metaphlan](#metaphlan)
+  - [Kraken](#kraken2)
+
 ## Targets
 If you don't want to run the full workflow from start to finish in one go you may specify one or several 'targets' on the commandline. Some useful targets are:
 
-- `qc` : Runs preprocessing (as specified in the configuration file) and generates a `sample_report.html`.
-- `assemble` : Runs steps up to and including the assembly part of the workflow and generates some assembly statistics.
-- `quantify` : Runs the quantification steps of genes called on assembled contigs (generates raw and normalized count tables).
-- `annotate` : Runs steps up to and including the assembly-based annotation of genes called on assembled contigs
-- `taxonomy` : Runs steps up to and including the taxonomic annotation of contigs.
-- `bin` : Runs steps up to and including genome binning and generates some statistics of the binned genomes.
-- `classify` : Runs read-based classification (_e.g._ Kraken/Centrifuge/MetaPhlAn).
+| Target | Description |
+| ------ | ----------- |
+| `qc`   | Runs preprocessing (as specified in the configuration file) and generates a `sample_report.html`|
+| `assemble` | Runs steps up to and including the assembly part of the workflow and generates some assembly statistics|
+| `quantify` | Runs the quantification steps of genes called on assembled contigs (generates raw and normalized count tables)|
+| `annotate` | Runs steps up to and including the assembly-based annotation of genes called on assembled contigs|
+| `taxonomy` | Runs steps up to and including the taxonomic annotation of contigs|
+| `bin` | Runs steps up to and including genome binning and generates some statistics of the binned genomes|
+| `classify` | Runs read-based classification (_e.g._ Kraken/Centrifuge/MetaPhlAn)|
 
 To use these targets add them to the snakemake command line call. For instance, to run only the preprocessing part:
 
@@ -23,14 +34,6 @@ Targets may also be combined, so if you want to generate assemblies **and** run 
 ```bash
 snakemake --use-conda --configfile config.yaml -j 4 assemble classify
 ```
-
-## Contents
-
-- [Assembly-based analysis](#assembly-based-analysis)
-  - [Megahit](#assemble-reads-with-megahit)
-- [Read-based analysis](#read-based-analysis)
-  - [Metaphlan](#metaphlan)
-  - [Kraken](#kraken2)
 
 ## Assembly-based analysis
 
@@ -55,21 +58,24 @@ megahit:
 
 #### Command
 ```bash
-snakemake --use-conda --configfile config.yaml -j 4 -p qc assemble
+snakemake --use-conda --configfile config.yaml -j 4 -p assemble
 ```
 
 **Output:**
 ```
 results
 |- assembly/               
-|  |- <assemblyGroup1>
+|  |- <assembly1>/final_contigs.fa   the fasta file with assembled contigs
 |  |- ...
-|  |- <assemblyGroupN>
+|  |- <assemblyN>/final_contigs.fa   
 |- report/
 |  |- assembly/
 |  |  |- assembly_stats.txt          table of assembly statistics         
 |  |  |- assembly_size_dist.txt      file with sizes of assemblies contained at different contig lengths
+|  |  |- assembly_stats.pdf          a plot of general assembly statistics
 ```
+
+To generate a report
 
 ## Read-based analysis
 
