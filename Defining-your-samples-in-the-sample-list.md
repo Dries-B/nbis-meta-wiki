@@ -1,6 +1,6 @@
 The workflow requires you to supply a file with some information on your samples. The path to this file is specified with the `sample_list:` parameter in the configuration file.
 
-As a minimum the file must contain the columns `sample`, `unit` and `fq1`.
+As a minimum the file must contain the columns `sample`, `unit` and `fq1`. Paired-end samples also require the `fq2` column for the mate 2 read file.
 
 A very basic sample file may look like this:
 
