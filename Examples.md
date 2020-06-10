@@ -73,9 +73,16 @@ results
 |  |  |- assembly_stats.txt          table of assembly statistics         
 |  |  |- assembly_size_dist.txt      file with sizes of assemblies contained at different contig lengths
 |  |  |- assembly_stats.pdf          a plot of general assembly statistics
+|  |  |- assembly_size_dist.pdf      a plot of the size distribution of the assembly
+|  |  |- alignment_frequency.pdf     a plot of the overall alignment frequency after mapping reads to assembled contigs
 ```
 
-To generate a report
+**NOTE**: To use the Metaspades assembler, simply change your config file to:
+
+```yaml
+assembly:
+  metaspades: True
+```
 
 ## Read-based analysis
 
