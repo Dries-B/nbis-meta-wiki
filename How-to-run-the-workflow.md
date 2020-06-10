@@ -1,14 +1,13 @@
-# Overview
-Here are a few common examples. They are written in a structure showing the relevant config parameters, the command(s) to run and the expected output. All examples assume you have updated a configuration file called `config.yaml` with the appropriate parameters, but you may of course use any config file name you want.
-
 ## Contents
 
 - [Targets](#targets)
-- [Assembly-based analysis](#assembly-based-analysis)
-  - [Megahit](#assemble-reads-with-megahit)
-- [Read-based analysis](#read-based-analysis)
-  - [Metaphlan](#metaphlan)
-  - [Kraken](#kraken2)
+- [Reports](#reports)
+- [Examples](#examples)
+  - [Assembly-based analysis](#assembly-based-analysis)
+    - [Megahit](#assemble-reads-with-megahit)
+  - [Read-based analysis](#read-based-analysis)
+    - [Metaphlan](#metaphlan)
+    - [Kraken](#kraken2)
 
 ## Targets
 If you don't want to run the full workflow from start to finish in one go you may specify one or several 'targets' on the commandline. Some useful targets are:
@@ -35,11 +34,36 @@ Targets may also be combined, so if you want to generate assemblies **and** run 
 snakemake --use-conda --configfile config.yaml -j 4 assemble classify
 ```
 
-## Assembly-based analysis
+## Reports
+After the workflow has completed you can generate a report with summarized statistics of the run. Depending on the run, the report will also include links to output files produced (_e.g._ tables, plots and html files). To produce a report, run:
 
-### Assemble reads with Megahit
+```bash
+snakemake --report report.html
+```
 
-#### Configuration
+**IMPORTANT:** When generating the report you must call snakemake the same way you did when you ran the workflow itself otherwise snakemake will report a `WorkflowError:` because the expected output is not present.
+
+As an example, say you have a config file `config.yaml` specifying to run preprocessing and assembly of your samples and you run the workflow as such: 
+
+```bash
+snakemake --use-conda -j 4 --configfile config.yaml
+```
+
+When the workflow is finished you can then generate a report by running:
+```bash
+snakemake --use-conda -j 4 --configfile config.yaml --report report.html
+```
+
+To see an example of what the report may look like [click here](https://github.com/NBISweden/nbis-meta/suites/767398678/artifacts/7993795) to download a report from one of the test runs of the workflow.
+
+## Examples
+Here are a few common examples. They are written in a structure showing the relevant configuration parameters, the command(s) to run and the expected output. All examples assume you have a configuration file called `config.yaml` with the appropriate parameters, but you may of course use any config file name you want. A suggestion is to make a copy of the [default config](https://github.com/NBISweden/nbis-meta/blob/master/config/config.yaml) file and make your changes in the copy.
+
+### Assembly-based analysis
+
+#### Assemble reads with Megahit
+
+##### Configuration
 ```yaml
 assembly:
   # run Megahit assembler?
@@ -56,12 +80,12 @@ megahit:
   extra_settings: "--min-contig-len 300 --prune-level 3"
 ```
 
-#### Command
+##### Command
 ```bash
 snakemake --use-conda --configfile config.yaml -j 4 -p assemble
 ```
 
-**Output:**
+##### Output
 ```
 results
 |- assembly/               
@@ -84,25 +108,24 @@ assembly:
   metaspades: True
 ```
 
-## Read-based analysis
+### Read-based analysis
 
-### Metaphlan
+#### Metaphlan
 
 The workflow runs the recently released version 3 of [Metaphlan](https://github.com/biobakery/MetaPhlAn). MetaPhlAn aligns reads to a set of core marker genes and estimates abundances of taxonomic clades in your samples. 
 
-**Config:**
+##### Configuration
 ```yaml
 classification:
   metaphlan: True
 ```
 
-**Command:**
-
+##### Command
 ```bash
 snakemake --use-conda --configfile config.yaml -j 4 -p classify
 ```
 
-**Output:**
+##### Output
 ```
 results
 |- metaphlan/               raw, per sample output from metaphlan 
@@ -114,4 +137,4 @@ results
 |  |- metaphlan.html        Krona interactive plot (Linux only)
 ```
 
-### Kraken2
+#### Kraken2
