@@ -1,0 +1,3 @@
+.. image:: https://nbis.se/assets/img/logos/nbislogo-green.svg
+  :width: 150
+  :alt: NBIS logo
