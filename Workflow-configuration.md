@@ -502,3 +502,50 @@ If you already have access to a built kraken database you may specify the databa
 - `reduce_memory:`
 
 Whether to run kraken2 with reduced memory requirements? Setting `reduce_memory: True` makes kraken2 run in `--memory-mapping` mode which avoids loading database into RAM and uses less memory.
+
+### Centrifuge
+```yaml
+centrifuge:
+  prebuilt: "p_compressed+h+v"
+  custom: ""
+  min_score: 75
+  max_assignments: 1
+```
+
+- `prebuilt:`
+
+The workflow uses prebuilt centrifuge databases that are downloaded from CCB servers. Choose from:
+
+- "p+h+v"
+- "nt_2018_2_12"
+- "nt_2018_3_3"
+- "p_compressed+h+v" or 
+- "p_compressed_2018_4_15"
+
+See [ccb.jhu.edu/software/centrifuge](http://ccb.jhu.edu/software/centrifuge) for more info.
+
+- `custom:`
+
+If you already have access to a built centrifuge database you may specify the path to it here.
+
+- `min_score:`
+
+Minimum score for classifications by centrifuge. This is used to filter results.
+
+- `max_assignments:`
+
+Maximum number of assignments per read. By default this is set to 5 in centrifuge. Setting it to 1 implements the LCA-classification as used in Kraken2.
+
+### MetaPhlan
+```yaml
+  index: "mpa_v30_CHOCOPhlAn_201901"
+  plot_rank: "genus"
+```
+
+- `index:`
+
+What version of MetaPhlan database to use. Currently, only `mpa_v30_CHOCOPhlAn_201901` is supported.
+
+- `plot_rank:`
+
+What rank to summarize and plot a clustermap of metaphlan output.
