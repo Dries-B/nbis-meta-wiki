@@ -14,6 +14,9 @@ The workflow can be configured using a configuration file in `yaml` format. Thes
   - [Taxonomy](#taxonomy)
 - [Binning](#binning)
   - [Maxbin](#maxbin)
+  - [Checkm](#checkm)
+  - [fastANI](#fastani)
+
 ## The sample list
 
 - `sample_list: config/samples.tsv` 
@@ -431,3 +434,46 @@ maxbin:
   # for binning. choose to use either markerset 40 (prokaryotes) or 107 (bacteria only)
   markerset: 40
 ```
+
+### Checkm
+```yaml
+checkm:
+  # run checkm taxonomy wf instead of lineage wf for bin QC?
+  # setting this to True can be beneficial when you want a rough estimate of
+  # completeness without having to run the resource heavy step of placing
+  # bins into a reference tree
+  taxonomy_wf: False
+  # rank to use for checkm taxonomy wf
+  rank: life
+  # taxon to use for checkm taxonomy wf
+  taxon: Prokaryote
+  # use a reduced pplacer tree for checkm (uses less RAM)
+  reduced_tree: False
+```
+
+### fastANI
+```yaml
+fastani:
+  ref_list: ""
+  # fraction overlap of alignments between two genomes to evaluate them for
+  # clustering
+  fraction: 0.5
+  # distance threshold to use for clustering genomes
+  # this is calculated as (100-ANI)/100 so setting 0.05 corresponds to clustering
+  # genomes at 95% identity
+  threshold: 0.05
+  # kmer size for fastANI
+  kmer_size: 16
+  # fragment length used to calculate ANI
+  frag_len: 3000
+```
+
+- `ref_list:`
+
+Path to a list of reference genomes to include in ANI calculations. This list must be tab-separated with the name/id of the genome in the first column and the RefSeq or Genbank ftp base url in the second column, e.g:
+
+| T_arc | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/009/387/875/GCA_009387875.1_ASM938787v1 |
+| P_med | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/240/225/GCF_000240225.1_ASM24022v2 |
+| L_bac | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/209/385/GCF_000209385.2_Lach_bact_2_1_46_FAA_V2 |
+| E_bac | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/302/695/GCF_000302695.1_LSJC7_1.0 |
+| B_mal | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/346/085/GCF_002346085.1_ASM234608v1 |
