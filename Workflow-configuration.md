@@ -13,7 +13,7 @@ The workflow can be configured using a configuration file in `yaml` format. Thes
 - [Annotation](#annotation)
   - [Taxonomy](#taxonomy)
 - [Binning](#binning)
-
+  - [Maxbin](#maxbin)
 ## The sample list
 
 - `sample_list: config/samples.tsv` 
@@ -396,8 +396,38 @@ binning:
   checkm: False
   # run gtdbtk to classify bins phylogenetically?
   gtdbtk: False
+  # calculate average nucleotide identity for binned genomes with fastANI?
+  fastani: False
 ```
 
 - `contig_lengths:` 
 
 This is the minimum length threshold of contigs to include by any of the binners. Setting this to a low threshold will likely lead to more sequences in your assembly being binned, but could come at the cost of higher contamination of the bins. The minimum possible setting is 1500 bp. The optimal setting will vary depending on your sample and the assembly so it may be a good idea to use several cutoffs and evaluate which one gives the best results (_e.g._ highest completeness and purity). Output from binning is placed in your main results directory under: `binning/<binning-tool>/<assembly-name>/<length-threshold>/`.
+
+- `metabat|concoct|maxbin:` 
+
+This sets the binning tools to use. They all use the composition and differential abundance to bin contigs but differ slightly in the specific implementation. Maxbin uses marker genes to identify 'seed' contigs and will only work with prokaryotic genomes. Concoct often bins a larger fraction of your assembly but may come at the cost of higher contamination. Metabat is currently the only of the three binners that is fully supported on OSX but it is possible to run the others on your Mac using Docker. You may set the workflow to use all three tools at once and then evaluate the results.
+
+- `threads:`
+
+The maximum number of threads to use for the binners.
+
+- `checkm:`
+
+Whether to assess quality of bins (_e.g._ completeness and contamination) using [checkm](https://github.com/Ecogenomics/CheckM/).
+
+- `gtdbtk:`
+
+Should bins be classified phylogenetically using the [GTDB toolkit](https://github.com/Ecogenomics/GTDBTk/)? Please note that `gtdbtk` is not supported on OSX.
+
+- `fastani:`
+
+Bins can be clustered based on average nucleotide identity (ANI) using `fastANI`. See below for fastANI settings and how to include reference genomes in the clustering. Note that only bins with at least 50% completeness and at most 10% contamination are included in clustering, which means that `checkm` is also run prior to fastANI.
+
+### Maxbin
+```yaml
+maxbin:
+  # maxbin2 uses marker gene identification on contigs to generate seed contigs
+  # for binning. choose to use either markerset 40 (prokaryotes) or 107 (bacteria only)
+  markerset: 40
+```
