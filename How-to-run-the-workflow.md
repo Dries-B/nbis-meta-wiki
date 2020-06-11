@@ -138,3 +138,23 @@ results
 ```
 
 #### Kraken2
+
+##### Configuration
+```yaml
+classification:
+  kraken: True
+```
+##### Command
+```bash
+snakemake --use-conda --configfile config.yaml -j 4 -p classify
+```
+
+##### Output
+```
+results
+|- kraken/                  raw, per sample output from kraken2
+|
+|- report/
+|- kraken/               
+|  |- kraken.krona.html     Krona interactive plot (Linux only)
+```
