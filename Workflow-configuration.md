@@ -438,12 +438,7 @@ maxbin:
 ### Checkm
 ```yaml
 checkm:
-  # run checkm taxonomy wf instead of lineage wf for bin QC?
-  # setting this to True can be beneficial when you want a rough estimate of
-  # completeness without having to run the resource heavy step of placing
-  # bins into a reference tree
   taxonomy_wf: False
-  # rank to use for checkm taxonomy wf
   rank: life
   # taxon to use for checkm taxonomy wf
   taxon: Prokaryote
@@ -451,20 +446,28 @@ checkm:
   reduced_tree: False
 ```
 
+- `taxonomy_wf:`
+
+Checkm estimates the completeness and contamination of genome bins by counting the number of marker genes. The set of marker genes to use can be inferred for each bin individually by running checkm in the `lineage_wf` mode (default for the `nbis-meta` workflow). This can result in better estimates of the completeness levels but relies on phylogenetic placement of bins which 1) may require more memory than what is available on some systems and 2) is currently not supported on OSX. To circumvent this you can set `taxonomy_wf: True` which uses a predefined set of marker genes for all bins. This may very well be enough for your project.
+
+- `rank:`
+- `taxon:`
+
+Taxonomic rank and taxon to use for checkm taxonomy_wf. With `rank: life` and `taxon: Prokaryote` checkm uses a list of universal marker genes found in both Archaea and Bacteria to estimate genome completeness.
+
+**Note:** These settings only apply to the `taxonomy_wf` part. If you set `taxonomy_wf: False` then the `rank:` and `taxon:` settings are ignored.
+
+- `reduced_tree:`
+
+Setting this to `True` runs checkm with a reduced reference tree, thus lowering the memory requirements.
+
 ### fastANI
 ```yaml
 fastani:
   ref_list: ""
-  # fraction overlap of alignments between two genomes to evaluate them for
-  # clustering
   fraction: 0.5
-  # distance threshold to use for clustering genomes
-  # this is calculated as (100-ANI)/100 so setting 0.05 corresponds to clustering
-  # genomes at 95% identity
   threshold: 0.05
-  # kmer size for fastANI
   kmer_size: 16
-  # fragment length used to calculate ANI
   frag_len: 3000
 ```
 
@@ -472,8 +475,34 @@ fastani:
 
 Path to a list of reference genomes to include in ANI calculations. This list must be tab-separated with the name/id of the genome in the first column and the RefSeq or Genbank ftp base url in the second column, e.g:
 
+|     |     |
+| --- | --- |
 | T_arc | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/009/387/875/GCA_009387875.1_ASM938787v1 |
 | P_med | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/240/225/GCF_000240225.1_ASM24022v2 |
 | L_bac | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/209/385/GCF_000209385.2_Lach_bact_2_1_46_FAA_V2 |
 | E_bac | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/302/695/GCF_000302695.1_LSJC7_1.0 |
 | B_mal | ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/346/085/GCF_002346085.1_ASM234608v1 |
+
+If you store this in a file, _e.g._ `resources/ref_genomes.tsv` and set:
+```yaml
+fastani:
+  ref_list: resources/ref_genomes.tsv
+```
+
+Then a genome nucleotide fasta file will be downloaded for each genome and included in the `fastANI` clustering. If not specified, only the binned genomes will be clustered with each other.
+
+- `fraction:`
+
+This is the minimum alignment overlap required between two genomes to trust their ANI value (and hence allow them to be clustered). It is expressed as a fraction of the smaller of the two genomes.
+
+- `threshold:`
+
+This is the distance threshold to use for clustering genomes. It is calculated as (100-ANI)/100 so setting 0.05 corresponds to clustering genomes at 95% identity.
+
+- `kmer_size:`
+
+kmer size to use for fastANI.
+
+- `frag_len:` 
+
+fastANI fragments genomes into non-overlapping fragments of size `frag_len` before performing alignment and computing ANI.
