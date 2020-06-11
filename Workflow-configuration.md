@@ -16,6 +16,10 @@ The workflow can be configured using a configuration file in `yaml` format. Thes
   - [Maxbin](#maxbin)
   - [Checkm](#checkm)
   - [fastANI](#fastani)
+- [Classification](#classification)
+  - [Kraken](#kraken)
+  - [Centrifuge](#centrifuge)
+  - [MetaPhlan](#metaphlan)
 
 ## The sample list
 
@@ -450,3 +454,51 @@ kmer size to use for fastANI.
 - `frag_len:` 
 
 fastANI fragments genomes into non-overlapping fragments of size `frag_len` before performing alignment and computing ANI.
+
+## Classification
+
+The classification part of the workflow is run directly on the (preprocessed) reads and independently of the _de novo_ assembly part. Reads can be classified using [kraken2](https://github.com/DerrickWood/kraken2/) and/or [centrifuge](https://github.com/DaehwanKimLab/centrifuge/). In addition, a taxonomic profile can be generated for samples using [MetaPhlan3](https://github.com/biobakery/MetaPhlAn).
+
+```yaml
+classification:
+  kraken: True
+  centrifuge: False
+  metaphlan: False
+```
+
+- `kraken:`
+
+Whether to run kraken2 classifier.
+
+- `centrifuge:`
+
+Whether to run centrifuge classifier.
+
+- `metaphlan:`
+
+Whether to run Metaphlan3 classifier.
+
+### Kraken
+```yaml
+kraken:
+  standard_db: False
+  prebuilt: "minikraken_8GB"
+  custom: ""
+  reduce_memory: False
+```
+
+- `standard_db:`
+
+Should kraken generate the standard database? Kee in mind that this will use a lot of resources during the build step. Optionally you may download pre-built database files (see below).
+
+- `prebuilt:`
+
+Download a prebuilt kraken2 database from the [CCB servers](ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/). Choose from "minikraken_8GB", "16S_Greengenes", "16S_RDP" or "16S_Silva".
+
+- `custom:`
+
+If you already have access to a built kraken database you may specify the database path here (path must contain hash.k2d, opts.k2d and taxo.k2d files).
+
+- `reduce_memory:`
+
+Whether to run kraken2 with reduced memory requirements? Setting `reduce_memory: True` makes kraken2 run in `--memory-mapping` mode which avoids loading database into RAM and uses less memory.
