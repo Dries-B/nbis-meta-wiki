@@ -6,6 +6,8 @@ If you will be running the workflow on the [Uppmax](https://uppmax.uu.se/) HPC c
   - [Kraken](#kraken-database)
   - [Centrifuge](#centrifuge-database)
   - [GTDB](#gtdb)
+  - [nr](#nr)
+  - [UniRef90](#uniref90)
 - [Configure workflow for SLURM](#Configure-workflow-for-the-slurm-workload-manager)
 
 ## Setting up database files
@@ -106,6 +108,36 @@ Then make sure your config file contains:
 ```yaml
 binning:
   gtdbtk: True
+```
+
+### nr
+Uppmax provides monthly snapshots of the `nr` non-redundant database. While the formatted file cannot be used directly with the `nbis-meta` workflow you can save time by making use of the already downloaded fasta file.
+
+To use the latest snapshot of `nr` for taxonomic annotation of contigs, do:
+```bash
+mkdir resources/nr
+ln -s /sw/data/diamond_databases/Blast/latest/download/nr.gz resources/nr/nr.fasta.gz
+```
+
+Then update the `taxonomy` section in your config file to use the `nr` database:
+```yaml
+taxonomy:
+  database: "nr"
+```
+
+### Uniref90
+The UniRef90 database is clustered at 90% sequence identity and Uppmax provides downloaded fasta files that can be used directly with the workflow:
+
+To use the latest snapshot of `UniRef90` for taxonomic annotation of contigs, do:
+```bash
+mkdir resources/uniref90
+ln -s /sw/data/diamond_databases/UniRef90/latest/download/uniref90.fasta.gz resources/uniref90/uniref90.fasta.gz
+```
+
+Then update the `taxonomy` section in your config file to use the `uniref90` database:
+```yaml
+taxonomy:
+  database: "uniref90"
 ```
 
 ## Configure workflow for the SLURM Workload Manager
