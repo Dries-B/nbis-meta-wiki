@@ -126,7 +126,7 @@ taxonomy:
 ```
 
 ### Uniref90
-The UniRef90 database is clustered at 90% sequence identity and Uppmax provides downloaded fasta files that can be used directly with the workflow:
+The UniRef90 database is clustered at 90% sequence identity and Uppmax provides downloaded fasta files that can be used directly with the workflow.
 
 To use the latest snapshot of `UniRef90` for taxonomic annotation of contigs, do:
 ```bash
