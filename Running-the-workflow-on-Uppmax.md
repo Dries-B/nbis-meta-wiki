@@ -2,6 +2,7 @@
 If you will be running the workflow on the [Uppmax](https://uppmax.uu.se/) HPC clusters here are some helpful tips.
 
 - [Setting up database files](#setting-up-database-files)
+  - [eggNOG](#eggnog)
   - [Pfam](#pfam-database)
   - [Kraken](#kraken-database)
   - [Centrifuge](#centrifuge-database)
@@ -16,6 +17,15 @@ All resources required to run this workflow are automatically downloaded as need
 First create a resource directory inside the base dir of the cloned git repository:
 ```bash
 mkdir resources
+```
+
+### eggNOG database
+To use the centrally installed `4.5.1` version of the eggNOG database on Uppmax, run:
+```bash
+mkdir resources/eggnog-mapper
+ln -s /sw/data/eggNOG/4.5.1/eggnog.db resources/eggnog-mapper/eggnog.db
+head -1 /sw/data/eggNOG/eggNOG-4.5.1-install-README.md > resources/eggnog-mapper/eggnog.version
+touch resources/eggnog-mapper/download.log
 ```
 
 ### Pfam database
