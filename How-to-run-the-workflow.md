@@ -15,12 +15,12 @@ If you don't want to run the full workflow from start to finish in one go you ma
 | Target | Description |
 | ------ | ----------- |
 | `qc`   | Runs preprocessing (as specified in the configuration file) and generates a `sample_report.html`|
-| `assemble` | Runs steps up to and including the assembly part of the workflow and generates some assembly statistics|
-| `quantify` | Runs the quantification steps of genes called on assembled contigs (generates raw and normalized count tables)|
-| `annotate` | Runs steps up to and including the assembly-based annotation of genes called on assembled contigs|
-| `taxonomy` | Runs steps up to and including the taxonomic annotation of contigs|
-| `bin` | Runs steps up to and including genome binning and generates some statistics of the binned genomes|
-| `classify` | Runs read-based classification (_e.g._ Kraken/Centrifuge/MetaPhlAn)|
+| `assemble` | Assembles samples according to sample list and config file, and generates some assembly statistics|
+| `quantify` | Quantifies open reading frames called on assembled contigs, producing RPKM-normalized and raw counts|
+| `annotate` | Annotates open reading frames called on assembled contigs using settings defined in the config file. Also quantifies genes and features, producing normalized and raw counts|
+| `taxonomy` | Assigns taxonomy to assembled contigs and open reading frames called on those contigs|
+| `bin` | Performs genome binning of assembled contigs and generates some statistics of the binned genomes|
+| `classify` | Read-based (_e.g._ Kraken/Centrifuge/MetaPhlAn) classification of preprocessed reads|
 
 To use these targets add them to the snakemake command line call. For instance, to run only the preprocessing part:
 
