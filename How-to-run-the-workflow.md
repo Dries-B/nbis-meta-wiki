@@ -5,6 +5,7 @@
 - [Examples](#examples)
   - [Assembly-based analysis](#assembly-based-analysis)
     - [Megahit](#assemble-reads-with-megahit)
+    - [Protein-level annotations](#protein-level-annotations)
   - [Read-based analysis](#read-based-analysis)
     - [Metaphlan](#metaphlan)
     - [Kraken](#kraken2)
@@ -107,6 +108,9 @@ results
 assembly:
   metaspades: True
 ```
+
+#### Protein-level annotations
+Open reading frames called on assembled contigs can be annotated using `eggnog-mapper`, `pfam_scan` and `rgi` (Resistance Gene Identifier)
 
 ### Read-based analysis
 
