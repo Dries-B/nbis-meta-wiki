@@ -110,7 +110,25 @@ assembly:
 ```
 
 #### Protein-level annotations
-Open reading frames called on assembled contigs can be annotated using `eggnog-mapper`, `pfam_scan` and `rgi` (Resistance Gene Identifier)
+Open reading frames called on assembled contigs can be annotated using `eggnog-mapper`, `pfam_scan` and `rgi` (Resistance Gene Identifier). If you are running the workflow on the Uppmax compute cluster you can use centrally installed databases for the first two of these, see more under the section [Running the workflow on Uppmax](https://github.com/NBISweden/nbis-meta/wiki/Running-the-workflow-on-Uppmax#setting-up-database-files]).
+
+##### Configuration
+Using these settings in your config file runs all three tools to annotate protein sequences in your assemblies.
+
+```yaml
+annotation:
+  # run eggnog-mapper to infer KEGG orthologs, pathways and modules?
+  eggnog: True
+  # run PFAM-scan to infer protein families from PFAM?
+  pfam: True
+  # run Resistance gene identifier?
+  rgi: True
+```
+
+##### Command
+```bash
+snakemake --use-conda --configfile config.yaml -j 4 -p annotate
+```
 
 ### Read-based analysis
 
