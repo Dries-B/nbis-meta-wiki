@@ -55,10 +55,10 @@ conda env create -f environment.yml
 You may also pull the latest Docker image:
 
 ```bash
-docker pull nbisweden/nbis-meta:2.0
+docker pull nbisweden/nbis-meta:2.2
 ```
 
-to get version `2.0`.
+to get version `2.2`.
 
 
 ## What's next?
