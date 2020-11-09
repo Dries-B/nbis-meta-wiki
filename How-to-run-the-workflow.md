@@ -1,5 +1,6 @@
 ## Contents
 
+- [Useful snakemake options](#useful-snakemake-options)
 - [Targets](#targets)
 - [Reports](#reports)
 - [Examples](#examples)
@@ -9,6 +10,27 @@
   - [Read-based analysis](#read-based-analysis)
     - [Metaphlan](#metaphlan)
     - [Kraken](#kraken2)
+
+Once you've created the [sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-your-samples-in-the-sample-list), and modified the [config file](https://github.com/NBISweden/nbis-meta/wiki/Workflow-configuration) the most basic way to run the workflow is with the command:
+
+```bash
+snakemake --configfile <myconfig.yaml> --cores 4 
+```
+
+Here `--cores` specifies how many CPU cores to use in parallell.
+
+## Useful snakemake options
+
+Other useful options that you can specify to snakemake on the command line include:
+
+- `-r` or `--reason`: print the reason for execution of each rule
+- `-p`or `--printshellcmds`: print shell commands that will be executed
+- `--nolock`: do not lock the working directory
+- `--unlock`: unlock working directory
+- `--ri` or `--rerun-incomplete`: re-run all jobs where output may be incomplete
+- `--jobs [N]` or `-j [N]`: Use at most N CPU cores/jobs in parallel. If `-j` is used with the SLURM profile to submit jobs in a compute cluster infrastructure, `-j` specifies the maximum number of jobs to submit to the queue.
+
+For a full list of snakemake command line options, see [here](https://snakemake.readthedocs.io/en/stable/executing/cli.html#all-options).
 
 ## Targets
 If you don't want to run the full workflow from start to finish in one go you may specify one or several 'targets' on the commandline. Some useful targets are:
