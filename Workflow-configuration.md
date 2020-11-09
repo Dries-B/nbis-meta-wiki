@@ -1,4 +1,4 @@
-The workflow can be configured using a configuration file in `yaml` format. These are the configuration parameters and their default values
+The workflow can be configured using a configuration file in `yaml` format. By default the workflow uses the file `config/config.yaml`. You can either edit that file directly or make a new configuration file and specify it at runtime with `--configfile <path/to/your/configfile.yaml`. These are the configuration parameters and their default values:
 
 - [Sample list](#the-sample-list)
 - [Paths](#paths)
