@@ -1,1 +1,0 @@
-- [Workflow configuration](https://github.com/NBISweden/nbis-meta/wiki/Workflow-configuration)
