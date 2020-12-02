@@ -2,7 +2,7 @@
 If you will be running the workflow on the [Uppmax](https://uppmax.uu.se/) HPC clusters here are some helpful tips.
 
 - [Setting up database files](#setting-up-database-files)
-  - [eggNOG](#eggnog)
+  - [eggNOG](#eggnog-database)
   - [Pfam](#pfam-database)
   - [Kraken](#kraken-database)
   - [Centrifuge](#centrifuge-database)
