@@ -24,6 +24,7 @@ To use the centrally installed `4.5.1` version of the eggNOG database on Uppmax,
 ```bash
 mkdir resources/eggnog-mapper
 ln -s /sw/data/eggNOG/4.5.1/eggnog.db resources/eggnog-mapper/eggnog.db
+ln -s /sw/data/eggNOG/4.5.1/eggnog_proteins.dmnd resources/eggnog-mapper/eggnog_proteins.dmnd
 head -1 /sw/data/eggNOG/eggNOG-4.5.1-install-README.md > resources/eggnog-mapper/eggnog.version
 touch resources/eggnog-mapper/download.log
 ```
