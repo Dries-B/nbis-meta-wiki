@@ -40,7 +40,7 @@ dependencies:
   - python=2.7.15
   - prodigal=2.6.3
   - pfam_scan=1.6
-  - eggnog-mapper=1.0.3 # <-- change the version here so that it reads 1.0.3
+  - eggnog-mapper=1.0.3 # <-- make sure this version is 1.0.3
   - infernal=1.1.2
   - trnascan-se=2.0.5
 ```
