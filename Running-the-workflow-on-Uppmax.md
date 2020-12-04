@@ -20,13 +20,29 @@ mkdir resources
 ```
 
 ### eggNOG database
-To use the centrally installed `4.5.1` version of the eggNOG database on Uppmax, run:
+The `4.5.1` version of the eggNOG database is installed in a central location on Uppmax. **However**, this database was built with eggnog-mapper `v1.0.3` and will not work with `v2.0.1` that comes with this workflow. More on this below, but first symlink the necessary files into your `resources/` directory.
 ```bash
 mkdir resources/eggnog-mapper
 ln -s /sw/data/eggNOG/4.5.1/eggnog.db resources/eggnog-mapper/eggnog.db
 ln -s /sw/data/eggNOG/4.5.1/eggnog_proteins.dmnd resources/eggnog-mapper/eggnog_proteins.dmnd
 head -1 /sw/data/eggNOG/eggNOG-4.5.1-install-README.md > resources/eggnog-mapper/eggnog.version
 touch resources/eggnog-mapper/download.log
+```
+
+To change the version of eggnog-mapper that the workflow uses, edit the conda environment file at `workflow/envs/annotation.yaml` so that it reads:
+
+```yaml
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=2.7.15
+  - prodigal=2.6.3
+  - pfam_scan=1.6
+  - eggnog-mapper=1.0.3
+  - infernal=1.1.2
+  - trnascan-se=2.0.5
 ```
 
 ### Pfam database
