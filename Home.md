@@ -35,7 +35,7 @@ You are now ready to start using the workflow! Check out the [How-to page](https
 
 # Workflow outline
 ## 1. Preprocessing
-This workflow can perform preprocessing of paired- and/or single-end metagenomic data (in fastq-format) using *e.g.*:
+This workflow can perform preprocessing of paired- and/or single-end whole-genome shotgun metagenomic data (in fastq-format) using *e.g.*:
 - Trimmomatic (adapter/quality trimming)
 - Cutadapt (adapter trimming)
 - SortMeRNA (rRNA filtering)
