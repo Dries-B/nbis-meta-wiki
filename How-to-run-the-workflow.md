@@ -14,7 +14,7 @@
 Once you've created the [sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-your-samples-in-the-sample-list), and modified the [config file](https://github.com/NBISweden/nbis-meta/wiki/Workflow-configuration) the most basic way to run the workflow is with the command:
 
 ```bash
-snakemake --configfile <myconfig.yaml> --cores 4 
+snakemake —-use-conda --configfile <myconfig.yaml> --cores 4 
 ```
 
 Here `--cores` specifies how many CPU cores to use in parallell.
