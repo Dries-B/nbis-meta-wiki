@@ -183,22 +183,13 @@ results
 
 #### Kraken2
 
-There are pre-built kraken databases available at [https://benlangmead.github.io/aws-indexes/k2](https://benlangmead.github.io/aws-indexes/k2). To make use of _e.g._ the Greengenes prebuilt database, copy its HTTPS url and run:
+There are pre-built kraken databases available at [https://benlangmead.github.io/aws-indexes/k2](https://benlangmead.github.io/aws-indexes/k2). To make use of _e.g._ the Greengenes prebuilt database, copy its HTTPS url and edit your config file to contain:
 
-```bash
-mkdir -p temp/kraken_db
-mkdir -p resources/kraken/prebuilt/16S_Greengenes/
-curl -L -o kraken.tgz <HTTPS-url>
-tar -C temp/kraken_db -xf kraken.tgz
-mv temp/kraken_db/*/* resources/kraken/prebuilt/16S_Greengenes
-rm -r temp/16S_Greengenes.tgz temp/kraken_db
-```
-
-This installs the prebuilt database under `resources/kraken/prebuilt/16S_Greengenes. To configure the workflow to use this database make sure your config file has the following setup:
 ```yaml
 kraken:
   standard_db: False
   prebuilt: "16S_Greengenes"
+  prebuilt_url: "<HTTPS url>" # <- Add the URL here
 ```
 
 ##### Configuration
