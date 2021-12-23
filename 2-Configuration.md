@@ -25,7 +25,7 @@ The workflow can be configured using a configuration file in `yaml` format. By d
 
 - `sample_list: config/samples.tsv` 
 
-Path to the sample list (**required**). See [Defining your samples in the sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-your-samples-in-the-sample-list) for instructions on how to format it for your data. By default this points to an example sample list for which the sequence data is generated as part of the workflow. Feel free to use it to get acquainted with the workflow.
+Path to the sample list (**required**). See [Defining a sample-list](https://github.com/NBISweden/nbis-meta/wiki/2a-Defining-a-sample-list) for instructions on how to format it for your data. By default this points to an example sample list for which the sequence data is generated as part of the workflow. Feel free to use it to get acquainted with the workflow.
 
 ## Paths
 

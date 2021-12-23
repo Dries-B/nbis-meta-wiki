@@ -11,7 +11,7 @@
     - [Metaphlan](#metaphlan)
     - [Kraken](#kraken2)
 
-Once you've created the [sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-your-samples-in-the-sample-list), and modified the [config file](https://github.com/NBISweden/nbis-meta/wiki/Workflow-configuration) the most basic way to run the workflow is with the command:
+Once you've modified the [config file](https://github.com/NBISweden/nbis-meta/wiki/Configuration) and created the [sample list](https://github.com/NBISweden/nbis-meta/wiki/Defining-a-sample-list), the most basic way to run the workflow is with the command:
 
 ```bash
 snakemake —-use-conda --configfile <myconfig.yaml> --cores 4 
